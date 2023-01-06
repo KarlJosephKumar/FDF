@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 14:21:27 by kakumar           #+#    #+#             */
-/*   Updated: 2022/12/20 13:46:33 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/01/04 09:57:33 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	get_columns(t_fdf *fdf, char **argv)
 	int	fd;
 	
 	fd = open(argv[1], O_RDONLY);
-	fdf->cols = 0;
+	fdf->map.cols = 0;
 	while (get_next_line(fd) != NULL)
-		fdf->cols++;
+		fdf->map.cols++;
 	close(fd);
-	return (fdf->cols);
+	return (fdf->map.cols);
 }
 
 int	get_rows(t_fdf *fdf)
@@ -32,10 +32,10 @@ int	get_rows(t_fdf *fdf)
 
 	i = 0;
 	j = 0;
-	while(fdf->map[i][j])
+	while(fdf->map.map[i][j])
 		j++;
-	fdf->rows = j;
-	return(fdf->rows);
+	fdf->map.rows = j;
+	return(fdf->map.rows);
 }
 
 char ***get_map(t_fdf *fdf, char **argv)
@@ -46,18 +46,18 @@ char ***get_map(t_fdf *fdf, char **argv)
 
 	i = 0;
 	j = 0;
-	fdf->cols = get_columns(fdf, argv);
-	fdf->map = (char ***) malloc (sizeof(char **) * fdf->cols);
-	if (!fdf->map)
+	fdf->map.cols = get_columns(fdf, argv);
+	fdf->map.map = (char ***) malloc (sizeof(char **) * fdf->map.cols);
+	if (!fdf->map.map)
 		return (NULL);
 	fd = open(argv[1], O_RDONLY);
-	while (fdf->cols > i)
+	while (fdf->map.cols > i)
 	{
-		fdf->map[i] = ft_split(get_next_line(fd), ' ');
-		if (!fdf->map[i])
+		fdf->map.map[i] = ft_split(get_next_line(fd), ' ');
+		if (!fdf->map.map[i])
 			return (NULL);
 		i++;
 	}
-	fdf->rows = get_rows(fdf);
-	return (fdf->map);
+	fdf->map.rows = get_rows(fdf);
+	return (fdf->map.map);
 }

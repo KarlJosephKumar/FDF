@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 11:49:34 by kakumar           #+#    #+#             */
-/*   Updated: 2023/01/01 11:48:04 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/01/06 11:08:03 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,90 @@
 #include <math.h>
 #include <stdio.h>
 
-int rgb_to_int(double r, double g, double b)
+void my_mlx_line_put(t_fdf *fdf, int color)
 {
-    int color = 0;
-    color |= (int)(b * 255);
-    color |= (int)(g * 255) << 8;
-    color |= (int)(r * 255) << 16;
-    return (color);
+	int err;
+	int	e2;
+
+	fdf->map.absx = abs(fdf->map.x2 - fdf->map.x1);
+	fdf->map.absy = abs(fdf->map.y2 - fdf->map.y1);
+	fdf->map.sx = get_sx(fdf);
+	fdf->map.sy = get_sy(fdf);
+	err = fdf->map.absx - fdf->map.absy;
+	while(1)
+	{
+		my_mlx_pixel_put(fdf, fdf->map.x1, fdf->map.y1, color);
+		if(fdf->map.x1 == fdf->map.x2 && fdf->map.y1 == fdf->map.y2)
+			break;
+		e2 = 2 * err;
+		if (e2 > -fdf->map.absy)
+		{
+			err -= fdf->map.absy;
+			fdf->map.x1 += fdf->map.sx;
+		}
+		if (e2 < fdf->map.absx)
+		{
+			err += fdf->map.absx;
+			fdf->map.y1 += fdf->map.sy;
+		}
+	}
+}
+
+void draw_hor_line(t_fdf *fdf)
+{
+	int	len;
+	int i;
+	int j;
+
+	i = 0;
+	len = 18;
+	fdf->map.x0 = (WINDOW_HEIGHT / 2.5) - (fdf->map.rows /2 * len);
+	fdf->map.y0 = (WINDOW_WIDTH / 2.2) - (fdf->map.cols /2 * len);
+	while(i < fdf->map.cols +1)
+	{
+		j = 0;
+		while(j < fdf->map.rows)
+		{
+			if(j+1 == fdf->map.rows)
+				break;
+			fdf->map.x1 = fdf->map.x0 + len * (j - i);
+			fdf->map.y1 = fdf->map.y0 + len * (j - i) /2;
+			fdf->map.x2 = fdf->map.x0 + len * (j - i + 1);
+			fdf->map.y2 = fdf->map.y0 + len * (j - i + 1) /2;
+			my_mlx_line_put(fdf, 0xFFFFFF);
+			j++;
+		}
+		fdf->map.x0 += len*2;
+		i++;
+	}
+}
+
+void draw_vert_line(t_fdf *fdf)
+{
+	int	len;
+	int i;
+	int j;
+
+	i = 0;
+	len = 18;
+	draw_hor_line(fdf);
+	fdf->map.x0 = (WINDOW_HEIGHT / 2.5) - (fdf->map.rows /2 * len) + len;
+	fdf->map.y0 = (WINDOW_WIDTH / 2.2) - (fdf->map.cols /2 * len) - (len/2);
+	while(i < fdf->map.cols)
+	{
+		j = 0;
+		while(j < fdf->map.rows)
+		{
+			fdf->map.x1 = fdf->map.x0 + len * (j - i);
+			fdf->map.y1 = fdf->map.y0 + len * (j - i) /2;
+			fdf->map.x2 = fdf->map.x0 + len * (j - i -1);
+			fdf->map.y2 = fdf->map.y0 + len * (j - i + 1) /2;
+			my_mlx_line_put(fdf, 0xFFFFFF);
+			j++;
+		}
+		fdf->map.x0 += len*2;
+		i++;
+	}
 }
 
 // int	draw_grid(void *mlx_ptr, void *window, t_fdf *fdf)
@@ -61,71 +138,6 @@ int rgb_to_int(double r, double g, double b)
 // 		pixel_x += 1;
 // 	}
 // }
-void my_mlx_line_put(void *fdf, int x1, int y1, int x2, int y2, int color)
-{
-	int dx;
-	int dy;
-	int sx;
-	int sy;
-	int err;
-
-	dx = abs(x2-x1);
-	dy = abs(y2-y1);
-	sx = x1 < x2 ? 1 : -1;
-	sy = y1 < y2 ? 1 : -1;
-	err = dx - dy;
-
-	while(1)
-	{
-		my_mlx_pixel_put(fdf, x1, y1, color);
-		if(x1 == x2 && y1 == y2)
-			break;
-		int e2 = 2 * err;
-		if (e2 > -dy)
-		{
-			err -=dy;
-			x1 += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			y1 += sy;
-		}
-	}
-}
-
-void draw_line(t_fdf *fdf)
-{
-	int	len;
-	int	x0;
-	int y0;
-	int x;
-	int y;
-	int i;
-	int j;
-	int x2;
-	int y2;
-
-	i = 0;
-	j = 0;
-	len = 10;
-	x0 = (WINDOW_HEIGHT / 2) - (fdf->rows /2 * len);
-	y0 = (WINDOW_WIDTH / 2) - (fdf->cols /2 * len);
-	while(i < fdf->rows)
-	{
-		while(j < fdf->cols)
-		{
-			x = x0 + len * (j - i);
-			y = y0 + len * (j - i) /2;
-			x2 = x0 + len * (j - i -1);
-			y2 = y0 + len * (j - i + 1) /2;
-			my_mlx_line_put(fdf, x, y, x2, y2, 0xFFFFFF);
-			j++;
-		}
-		i++;
-	}
-}
-
 // 	int pixels;
 // 	t_draw draw;
 // 	double	pixel_x;

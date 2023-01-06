@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:48:18 by kakumar           #+#    #+#             */
-/*   Updated: 2022/12/21 13:15:15 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/01/04 09:48:19 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	main(int argc, char **argv)
 		ft_printf("Number of arguments is wrong.\n");
 		return (-1);
 	}
-	fdf.map = get_map(&fdf, argv);
-	if (fdf.map == NULL)
+	fdf.map.map = get_map(&fdf, argv);
+	if (fdf.map.map == NULL)
 	{
 		ft_printf("Invalid map");
 		return (-1);
