@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 10:11:41 by kakumar           #+#    #+#             */
-/*   Updated: 2023/01/06 11:26:18 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/01/25 15:22:34 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		main(int argc, char **argv);
 void	draw_vert_line(t_fdf *fdf);
 void	initialize_image(t_fdf *fdf);
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
-void	my_mlx_line_put(t_fdf *fdf, int color);
+void	my_mlx_line_put(t_fdf *fdf, int color, int z);
 int		exit_hook(void *param);
 void	init_hooks(t_fdf *fdf);
 char	***get_map(t_fdf *fdf, char **argv);

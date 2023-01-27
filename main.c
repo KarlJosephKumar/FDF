@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:48:18 by kakumar           #+#    #+#             */
-/*   Updated: 2023/01/04 09:48:19 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/01/09 12:49:11 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,4 @@ int	main(int argc, char **argv)
 	}
 	open_win(&fdf);
 	return (0);
-}
+} 
