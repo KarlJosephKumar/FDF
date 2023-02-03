@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 11:49:34 by kakumar           #+#    #+#             */
-/*   Updated: 2023/01/27 11:39:04 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/01 21:27:28 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,103 +15,135 @@
 #include <math.h>
 #include <stdio.h>
 
-void my_mlx_line_put(t_fdf *fdf, int color, int z)
+void	connect_line(t_fdf *fdf)
 {
-	int err;
-	int	e2;
-
-	fdf->map.absx = abs(fdf->map.x2 - fdf->map.x1);
-	fdf->map.absy = abs(fdf->map.y2 - fdf->map.y1);
-	fdf->map.sx = get_sx(fdf);
-	fdf->map.sy = get_sy(fdf);
-	err = fdf->map.absx - fdf->map.absy;
-	z = 0;
-	while(1)
+	init_draw(fdf);
+	if (fdf->map.x1 == fdf->map.x2)
 	{
-		my_mlx_pixel_put(fdf, fdf->map.x1, fdf->map.y1, color);
-		if(fdf->map.x1 == fdf->map.x2 && fdf->map.y1 == fdf->map.y2)
-			break;
-		e2 = 2 * err;
-		if (e2 > -fdf->map.absy)
+		while (fdf->map.y1 != fdf->map.y2)
 		{
-			err -= fdf->map.absy;
-			fdf->map.x1 += fdf->map.sx;
+			my_mlx_pixel_put(fdf, fdf->map.x1, fdf->map.y1, fdf->draw.color);
+			fdf->map.y1 += fdf->draw.draw_y;
 		}
-		if (e2 < fdf->map.absx)
+	}
+	while (fdf->map.x1 != fdf->map.x2)
+	{
+		while (fdf->draw.draw_start >= 1)
 		{
-			err += fdf->map.absx;
-			fdf->map.y1 += fdf->map.sy;
+			my_mlx_pixel_put(fdf, fdf->map.x1, fdf->map.y1, fdf->draw.color);
+			fdf->draw.draw_start--;
+			fdf->map.y1 += fdf->draw.draw_y;
 		}
+		my_mlx_pixel_put(fdf, fdf->map.x1, fdf->map.y1, fdf->draw.color);
+		fdf->draw.draw_start += fdf->draw.amount_to_draw;
+		fdf->map.x1 += fdf->draw.draw_x;
 	}
 }
-
-void draw_hor_line(t_fdf *fdf)
+void	calculate_vert(t_fdf *fdf, int curr_x, int curr_y)
 {
-	int	len;
-	int i;
-	int j;
-	int z;
-
-	i = 0;
-	len = 18;
-	fdf->map.x0 = (WINDOW_HEIGHT / 2.5) - (fdf->map.rows /2 * len);
-	fdf->map.y0 = (WINDOW_WIDTH / 2.2) - (fdf->map.cols /2 * len);
-	printf("|y0 : %i", fdf->map.y0);
-	z = 0;
-	while(i < fdf->map.cols +1)
-	{
-		j = 0;
-		while(j < fdf->map.rows)
+		fdf->map.x1 = 500 + curr_x * GRID_WIDTH / fdf->map.cols;
+		fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols;
+		fdf->map.x2 = 500 + (curr_x) * GRID_WIDTH / fdf->map.cols;
+		fdf->map.y2 = (curr_y + 1) * GRID_WIDTH / fdf->map.cols;
+		if (fdf->map.highest_z < 15 && fdf->map.lowest_z > -15)
 		{
-			if(j+1 == fdf->map.rows)
-				break;
-			if (i < fdf->map.cols && j < fdf->map.rows)
-				z = ft_atoi(fdf->map.map[i][j]);
-			fdf->map.x1 = fdf->map.x0 + len * (j - i);
-			fdf->map.y1 = fdf->map.y0 + len * (j - i) /2 - z;
-			printf("|y1 : %i", fdf->map.y1);
-			if (i < fdf->map.cols && j < fdf->map.rows)
-			z = ft_atoi(fdf->map.map[i][j]);
-			fdf->map.x2 = fdf->map.x0 + len * (j - i + 1);
-			fdf->map.y2 = fdf->map.y0 + len * (j - i + 1) /2 - z;
-			printf("|y2 : %i\n", fdf->map.y2);
-			my_mlx_line_put(fdf, 0xFFFFFF, z);
-			j++;
+			fdf->map.mult = 5;
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
+			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x] * fdf->map.mult;
 		}
-		fdf->map.x0 += len*2;
-		i++;
-	}
+		else if (fdf->map.highest_z < 40 && fdf->map.lowest_z > -40)
+		{
+			fdf->map.mult = 3;
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
+			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x] * fdf->map.mult;
+		}
+		else
+		{
+			fdf->map.mult = 1;
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x];
+			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x];
+		}
+		calculate_colors(fdf);
+		rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
+		rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
 }
 
-void draw_vert_line(t_fdf *fdf)
+int	draw_vert_line(t_fdf *fdf)
 {
-	int	len;
-	int i;
-	int j;
-	int z;
-	
-	i = 0;
-	len = 18;
-	draw_hor_line(fdf);
-	fdf->map.x0 = (WINDOW_HEIGHT / 2.5) - (fdf->map.rows /2 * len) + len;
-	fdf->map.y0 = (WINDOW_WIDTH / 2.2) - (fdf->map.cols /2 * len) - (len/2);
-	z = 0;
-	while(i < fdf->map.cols)
+	static int	curr_x = 0;
+	static int	curr_y = 0;
+
+	if (curr_y == fdf->map.rows - 1)
 	{
-		j = 0;
-		while(j < fdf->map.rows)
+		if (curr_x == fdf->map.cols)
 		{
-			z = ft_atoi(fdf->map.map[i][j]);
-			fdf->map.x1 = fdf->map.x0 + len * (j - i);
-			fdf->map.y1 = fdf->map.y0 + len * (j - i) /2 - z;
-			if (fdf->map.map[i][j + 1])
-			z = ft_atoi(fdf->map.map[i][j + 1]);
-			fdf->map.x2 = fdf->map.x0 + len * (j - i -1);
-			fdf->map.y2 = fdf->map.y0 + len * (j - i + 1) /2 - z;
-			my_mlx_line_put(fdf, 0xFFFFFF, z);
-			j++;
+			curr_x = 0;
+			curr_y = 0;
+			return (0);
 		}
-		fdf->map.x0 += len*2;
-		i++;
+		curr_y = 0;
+		curr_x++;
 	}
+	if (curr_x < fdf->map.cols)
+	{
+		calculate_vert(fdf, curr_x, curr_y);
+		curr_y++;
+		return (1);
+	}
+	else
+		return (0);
+}
+void	calculate_hor(t_fdf *fdf, int curr_x, int curr_y)
+{
+		fdf->map.mult = 1;
+		fdf->map.x1 = 500 + curr_x * GRID_WIDTH / fdf->map.cols;
+		fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols;
+		fdf->map.x2 = 500 + (curr_x + 1) * GRID_WIDTH / fdf->map.cols;
+		fdf->map.y2 = (curr_y) * GRID_WIDTH / fdf->map.cols;
+		if (fdf->map.highest_z < 15 && fdf->map.lowest_z > -15)
+		{
+			fdf->map.mult = 5;
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
+			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1] * fdf->map.mult;
+		}
+		else if (fdf->map.highest_z < 40 && fdf->map.lowest_z > -40)
+		{
+			fdf->map.mult = 3;
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
+			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1] * fdf->map.mult;
+		}
+		else
+		{
+			fdf->map.z1 = fdf->map.map[curr_y][curr_x];
+			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1];
+		}
+		calculate_colors(fdf);
+		rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
+		rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
+}
+
+int	draw_hor_line(t_fdf *fdf)
+{
+	static int	curr_x = 0;
+	static int	curr_y = 0;
+
+	if (curr_x == fdf->map.cols - 1)
+	{
+		if (curr_y == fdf->map.rows)
+		{
+			curr_x = 0;
+			curr_y = 0;
+			return (0);
+		}
+		curr_x = 0;
+		curr_y++;
+	}
+	if (curr_y  < fdf->map.rows)
+	{
+		calculate_hor(fdf, curr_x, curr_y);
+		curr_x++;
+		return (1);
+	}
+	else
+		return (0);
 }

@@ -6,22 +6,24 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 10:11:41 by kakumar           #+#    #+#             */
-/*   Updated: 2023/01/25 15:22:34 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/01 21:47:39 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define WINDOW_HEIGHT 1220
-# define WINDOW_WIDTH 860
+# define WINDOW_HEIGHT 1080
+# define WINDOW_WIDTH 1920
+# define GRID_WIDTH 750
 
 # include <stdlib.h>
 # include "mlx.h"
 # include "libft/ft_printf.h"
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
-
+# include <math.h>
+# include <stdio.h>
 typedef struct s_img
 {
 	void	*image;
@@ -38,29 +40,31 @@ typedef struct s_draw
 	int		end_y;
 	int 	end_x;
 	int		color;
-	double	delta_y;
-	double	delta_x;
+	int		draw_x;
+	int		draw_y;
+	float	amount_to_draw;
+	float	draw_start;
 }	t_draw;
 
 typedef struct s_map
 {
 	int		rows;
 	int		cols;
-	char	***map;
-	int		x0;
-	int		y0;
+	int		**map;
 	int		x1;
 	int		y1;
 	int		x2;
 	int		y2;
-	int		absx;
-	int		absy;
-	int		sx;
-	int		sy;
+	int		z1;
+	int		z2;
+	int		lowest_z;
+	int		highest_z;
+	int		mult;
 }	t_map;
 
 typedef struct s_fdf
 {
+	t_draw	draw;
 	t_map	map;
 	t_img	img;
 	void	*mlx_ptr;
@@ -68,13 +72,16 @@ typedef struct s_fdf
 }	t_fdf;
 
 int		main(int argc, char **argv);
-void	draw_vert_line(t_fdf *fdf);
+int		draw_hor_line(t_fdf *fdf);
+int		draw_vert_line(t_fdf *fdf);
 void	initialize_image(t_fdf *fdf);
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
-void	my_mlx_line_put(t_fdf *fdf, int color, int z);
 int		exit_hook(void *param);
 void	init_hooks(t_fdf *fdf);
-char	***get_map(t_fdf *fdf, char **argv);
-int		get_sx(t_fdf *fdf);
-int		get_sy(t_fdf *fdf);
+int		**get_map(t_fdf *fdf, char **argv, int fd);
+void 	init_draw(t_fdf *fdf);
+void 	connect_line(t_fdf *fdf);
+void	get_z_values(t_fdf *fdf);
+void	rotate(int *mapx, int *mapy, int *z);
+void	calculate_colors(t_fdf *fdf);
 #endif
