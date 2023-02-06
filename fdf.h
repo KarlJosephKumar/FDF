@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 10:11:41 by kakumar           #+#    #+#             */
-/*   Updated: 2023/02/01 21:47:39 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/03 17:19:13 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define WINDOW_HEIGHT 1080
 # define WINDOW_WIDTH 1920
-# define GRID_WIDTH 750
+# define GRID_WIDTH 650
 
 # include <stdlib.h>
 # include "mlx.h"
@@ -69,6 +69,8 @@ typedef struct s_fdf
 	t_img	img;
 	void	*mlx_ptr;
 	void	*win;
+	int		i;
+	int		j;
 }	t_fdf;
 
 int		main(int argc, char **argv);
@@ -78,10 +80,12 @@ void	initialize_image(t_fdf *fdf);
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
 int		exit_hook(void *param);
 void	init_hooks(t_fdf *fdf);
-int		**get_map(t_fdf *fdf, char **argv, int fd);
+void	get_map(t_fdf *fdf, char **argv, int fd);
 void 	init_draw(t_fdf *fdf);
 void 	connect_line(t_fdf *fdf);
 void	get_z_values(t_fdf *fdf);
 void	rotate(int *mapx, int *mapy, int *z);
 void	calculate_colors(t_fdf *fdf);
+void	shutdown(char *str);
+int		shutdown_int(char *str);
 #endif

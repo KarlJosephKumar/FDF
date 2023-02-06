@@ -6,14 +6,11 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 11:49:34 by kakumar           #+#    #+#             */
-/*   Updated: 2023/02/01 21:27:28 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/06 14:27:43 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include "fdf.h"
-#include <math.h>
-#include <stdio.h>
 
 void	connect_line(t_fdf *fdf)
 {
@@ -39,33 +36,18 @@ void	connect_line(t_fdf *fdf)
 		fdf->map.x1 += fdf->draw.draw_x;
 	}
 }
+
 void	calculate_vert(t_fdf *fdf, int curr_x, int curr_y)
 {
-		fdf->map.x1 = 500 + curr_x * GRID_WIDTH / fdf->map.cols;
-		fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols;
-		fdf->map.x2 = 500 + (curr_x) * GRID_WIDTH / fdf->map.cols;
-		fdf->map.y2 = (curr_y + 1) * GRID_WIDTH / fdf->map.cols;
-		if (fdf->map.highest_z < 15 && fdf->map.lowest_z > -15)
-		{
-			fdf->map.mult = 5;
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
-			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x] * fdf->map.mult;
-		}
-		else if (fdf->map.highest_z < 40 && fdf->map.lowest_z > -40)
-		{
-			fdf->map.mult = 3;
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
-			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x] * fdf->map.mult;
-		}
-		else
-		{
-			fdf->map.mult = 1;
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x];
-			fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x];
-		}
-		calculate_colors(fdf);
-		rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
-		rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
+	fdf->map.x1 = 1200 + curr_x * GRID_WIDTH / fdf->map.cols;
+	fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols - 400;
+	fdf->map.x2 = 1200 + (curr_x) * GRID_WIDTH / fdf->map.cols;
+	fdf->map.y2 = (curr_y + 1) * GRID_WIDTH / fdf->map.cols - 400;
+	fdf->map.z1 = fdf->map.map[curr_y][curr_x];
+	fdf->map.z2 = fdf->map.map[curr_y + 1][curr_x];
+	calculate_colors(fdf);
+	rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
+	rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
 }
 
 int	draw_vert_line(t_fdf *fdf)
@@ -93,33 +75,19 @@ int	draw_vert_line(t_fdf *fdf)
 	else
 		return (0);
 }
+
 void	calculate_hor(t_fdf *fdf, int curr_x, int curr_y)
 {
-		fdf->map.mult = 1;
-		fdf->map.x1 = 500 + curr_x * GRID_WIDTH / fdf->map.cols;
-		fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols;
-		fdf->map.x2 = 500 + (curr_x + 1) * GRID_WIDTH / fdf->map.cols;
-		fdf->map.y2 = (curr_y) * GRID_WIDTH / fdf->map.cols;
-		if (fdf->map.highest_z < 15 && fdf->map.lowest_z > -15)
-		{
-			fdf->map.mult = 5;
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
-			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1] * fdf->map.mult;
-		}
-		else if (fdf->map.highest_z < 40 && fdf->map.lowest_z > -40)
-		{
-			fdf->map.mult = 3;
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x] * fdf->map.mult;
-			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1] * fdf->map.mult;
-		}
-		else
-		{
-			fdf->map.z1 = fdf->map.map[curr_y][curr_x];
-			fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1];
-		}
-		calculate_colors(fdf);
-		rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
-		rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
+	fdf->map.mult = 1;
+	fdf->map.x1 = 1200 + curr_x * GRID_WIDTH / fdf->map.cols;
+	fdf->map.y1 = curr_y * GRID_WIDTH / fdf->map.cols - 400;
+	fdf->map.x2 = 1200 + (curr_x + 1) * GRID_WIDTH / fdf->map.cols;
+	fdf->map.y2 = (curr_y) * GRID_WIDTH / fdf->map.cols - 400;
+	fdf->map.z1 = fdf->map.map[curr_y][curr_x];
+	fdf->map.z2 = fdf->map.map[curr_y][curr_x + 1];
+	calculate_colors(fdf);
+	rotate(&fdf->map.x1, &fdf->map.y1, &fdf->map.z1);
+	rotate(&fdf->map.x2, &fdf->map.y2, &fdf->map.z2);
 }
 
 int	draw_hor_line(t_fdf *fdf)
@@ -138,7 +106,7 @@ int	draw_hor_line(t_fdf *fdf)
 		curr_x = 0;
 		curr_y++;
 	}
-	if (curr_y  < fdf->map.rows)
+	if (curr_y < fdf->map.rows)
 	{
 		calculate_hor(fdf, curr_x, curr_y);
 		curr_x++;
