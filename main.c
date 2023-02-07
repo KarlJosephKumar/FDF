@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:48:18 by kakumar           #+#    #+#             */
-/*   Updated: 2023/02/06 14:34:51 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/07 15:52:02 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 		return (shutdown_int("Invalid file"));
+	if (ft_check_dir(argv[1]) == -1)
+		return (shutdown_int("Tried opening a folder"));
 	fdf.i = 0;
 	get_map(&fdf, argv, fd);
 	get_z_values(&fdf);

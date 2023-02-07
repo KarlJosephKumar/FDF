@@ -6,7 +6,7 @@
 /*   By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 10:05:43 by kakumar           #+#    #+#             */
-/*   Updated: 2023/02/06 14:29:42 by kakumar          ###   ########.fr       */
+/*   Updated: 2023/02/07 15:32:13 by kakumar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	calculate_colors(t_fdf *fdf)
 		fdf->draw.color = 0xFFFF00;
 	else if (fdf->map.z1 == highz && fdf->map.z2 == highz)
 		fdf->draw.color = 0xFF0000;
+	else if (fdf->map.z1 == lowz && fdf->map.z2 == lowz)
+		fdf->draw.color = 0x0000FF;
 	else
 		fdf->draw.color = 0xFFFFFF;
 }
