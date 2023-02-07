@@ -6,7 +6,7 @@
 #    By: kakumar <kakumar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/31 13:50:32 by jofoto            #+#    #+#              #
-#    Updated: 2022/12/19 09:55:45 by kakumar          ###   ########.fr        #
+#    Updated: 2023/02/07 15:46:38 by kakumar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 	  ft_itoa.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
 	  ft_printf.c ft_putchar_count.c ft_putlohex_count.c ft_putnbr_count.c ft_putpointer_count.c \
 	  ft_putstr_count.c ft_putuphex_count.c ft_putusnbr_count.c \
-	  get_next_line.c get_next_line_utils.c
+	  get_next_line.c get_next_line_utils.c ft_check_dir.c
 
 SRC_BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c \
 			ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c \
@@ -37,7 +37,7 @@ OBJECTFILES = ft_isalpha.o ft_isdigit.o ft_isalnum.o ft_isascii.o ft_isprint.o \
 			  ft_itoa.o ft_putstr_fd.o ft_putendl_fd.o ft_putnbr_fd.o \
 			  ft_printf.o ft_putchar_count.o ft_putlohex_count.o ft_putnbr_count.o ft_putpointer_count.o\
  			  ft_putstr_count.o ft_putuphex_count.o ft_putusnbr_count.o \
-			  get_next_line.o get_next_line_utils.o
+			  get_next_line.o get_next_line_utils.o ft_check_dir.o
 
 OBJECTFILES_BONUS = ft_lstnew_bonus.o ft_lstadd_front_bonus.o \
 			ft_lstsize_bonus.o ft_lstlast_bonus.o ft_lstadd_back_bonus.o \
