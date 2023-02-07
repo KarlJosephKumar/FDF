@@ -8,3 +8,5 @@ Clean the executables and object files with 'make fclean'.
 
 Example on how to run maps:
 ./fdf test_maps/42.fdf
+
+Minilibx_macos works only with Macs. Needs a linux version for linux.
